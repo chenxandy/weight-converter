@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重量換算</title>
+<style>
+  body {
+    font-family: "Times New Roman", "SimSun", "宋體", serif;
+    background: #f7f5f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 36px 40px;
+    width: 340px;
+  }
+  h1 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 28px;
+    font-weight: normal;
+    letter-spacing: 2px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .unit {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: "Times New Roman", "SimSun", "宋體", serif;
+  }
+  input:focus {
+    outline: none;
+    border-color: #8a7256;
+  }
+  .suffix {
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+  }
+  .buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  button {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "Times New Roman", "SimSun", "宋體", serif;
+  }
+  .confirm {
+    background: #8a7256;
+    color: #fff;
+  }
+  .confirm:hover {
+    background: #75604a;
+  }
+  .clear {
+    background: #eee;
+    color: #555;
+  }
+  .clear:hover {
+    background: #ddd;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>重量換算</h1>
+
+  <div class="row" id="rowA">
+    <div class="unit">
+      <input type="number" id="kgA" placeholder="0" step="1">
+      <span class="suffix">公斤</span>
+    </div>
+    <div class="unit">
+      <input type="number" id="gA" placeholder="0">
+      <span class="suffix">公克</span>
+    </div>
+  </div>
+
+  <div class="row" id="rowB">
+    <div class="unit">
+      <input type="number" id="kgB" placeholder="0">
+      <span class="suffix">公斤</span>
+    </div>
+  </div>
+
+  <div class="row" id="rowC">
+    <div class="unit">
+      <input type="number" id="jinC" placeholder="0" step="1">
+      <span class="suffix">斤</span>
+    </div>
+    <div class="unit">
+      <input type="number" id="liangC" placeholder="0">
+      <span class="suffix">兩</span>
+    </div>
+  </div>
+
+  <div class="row" id="rowD">
+    <div class="unit">
+      <input type="number" id="jinD" placeholder="0">
+      <span class="suffix">斤</span>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button class="confirm" onclick="calculate()">確認</button>
+    <button class="clear" onclick="clearAll()">清除</button>
+  </div>
+</div>
+
+<script>
+  var lastRow = null;
+
+  ["kgA", "gA"].forEach(function(id) {
+    document.getElementById(id).addEventListener("input", function() { lastRow = "A"; });
+  });
+  document.getElementById("kgB").addEventListener("input", function() { lastRow = "B"; });
+  ["jinC", "liangC"].forEach(function(id) {
+    document.getElementById(id).addEventListener("input", function() { lastRow = "C"; });
+  });
+  document.getElementById("jinD").addEventListener("input", function() { lastRow = "D"; });
+
+  function round2(x) {
+    return Math.round(x * 100) / 100;
+  }
+
+  function calculate() {
+    var kgA = document.getElementById("kgA");
+    var gA = document.getElementById("gA");
+    var kgB = document.getElementById("kgB");
+    var jinC = document.getElementById("jinC");
+    var liangC = document.getElementById("liangC");
+    var jinD = document.getElementById("jinD");
+
+    var totalGrams;
+
+    if (lastRow === "A") {
+      totalGrams = (parseFloat(kgA.value) || 0) * 1000 + (parseFloat(gA.value) || 0);
+    } else if (lastRow === "B") {
+      totalGrams = (parseFloat(kgB.value) || 0) * 1000;
+    } else if (lastRow === "C") {
+      totalGrams = (parseFloat(jinC.value) || 0) * 600 + (parseFloat(liangC.value) || 0) * 37.5;
+    } else if (lastRow === "
